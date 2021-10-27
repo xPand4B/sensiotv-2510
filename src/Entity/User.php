@@ -10,17 +10,18 @@ use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\Table;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints\Email;
-use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotCompromisedPassword;
-use Symfony\Component\Validator\Constraints\Unique;
 
 #[Entity(repositoryClass: UserRepository::class)]
 #[Table(name: 'users')]
 //#[UniqueEntity('email')]
-class User implements PasswordAuthenticatedUserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    use HasAuth;
+
     #[Id, GeneratedValue, Column(type: 'integer')]
     private ?int $id;
 
@@ -30,7 +31,7 @@ class User implements PasswordAuthenticatedUserInterface
     #[Column(type: 'string', length: 50)]
     private ?string $lastname;
 
-    #[Column(type: 'string', length: 200)]
+    #[Column(type: 'string', length: 200, unique: true)]
     #[Email]
     private ?string $email;
 
