@@ -11,7 +11,7 @@
                         {{ movie.title }}
                         <small class="text-muted">({{ movie.releaseDate|date('Y') }})</small>
                     </h1>
-                    <p class="text-success font-weight-bold">USA | PG-13 | 181 min | Action, Adventure, Drama, Sci-Fi | {{ movie.releaseDate|date('d. M Y') }}</p>
+                    <p class="text-success font-weight-bold">USA | PG-13 | {{ movie.duration }} | Action, Adventure, Drama, Sci-Fi | {{ movie.releaseDate|date('d. M Y') }}</p>
                 </div>
                 <div class="col-lg-2 my-auto">
                     <h2 class="font-weight-bold"><i class="fas fa-star text-warning"></i> 8,5/10</h2>

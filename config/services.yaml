@@ -32,3 +32,7 @@ services:
 #            $omdbClient: '@Symfony\Contracts\HttpClient\HttpClientInterface'
             $omdbToken: '%env(string:OMDB_TOKEN)%'
             $omdbHost: '%env(string:OMDB_HOST)%'
+
+    App\EventListener\MovieImportedListener:
+        tags:
+            - { name: 'doctrine.orm.event_listener', event: 'postPersist', entity: 'App\Entity\Movie' }

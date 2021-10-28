@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 #[Route('/movie', name: 'movie.')]
 class MovieController extends AbstractController
@@ -21,13 +22,16 @@ class MovieController extends AbstractController
     ){
     }
 
+    /**
+     * This Method has automatic "Route Entity Binding".
+     * @see https://symfony.com/bundles/SensioFrameworkExtraBundle/current/annotations/converters.html
+     */
     #[Route('/{id}', name: 'show', requirements: ['id' => '\d+'], methods: 'GET')]
     public function show(Movie $movie): Response
     {
-        /**
-         * This Method has automatic "Route Entity Binding".
-         * @see https://symfony.com/bundles/SensioFrameworkExtraBundle/current/annotations/converters.html
-         */
+        $this->denyAccessUnlessGranted(
+            'MOVIE_SHOW', $movie, 'You can only view Movies younger than you.'
+        );
 
         return $this->render('movie/show.html.twig', compact('movie'));
     }
@@ -58,6 +62,11 @@ class MovieController extends AbstractController
     #[Route('/{imdbID}/import', name: 'import', requirements: ['imdbID' => 'tt\d+'], methods: 'GET')]
     public function import(string $imdbID): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_MOVIE_IMPORT');
+//        if (!$this->isGranted('ROLE_USER')) {
+//            throw new AccessDeniedException();
+//        }
+
         $result = $this->omdbApi->requestOneById($imdbID);
         $movie = Movie::fromApi($result);
         $this->entityManager->persist($movie);

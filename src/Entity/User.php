@@ -107,6 +107,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getBirthday(): \Datetime
+    {
+        return new \Datetime('2000-01-01');
+    }
+
 //    #[IsTrue(message: 'The password should not contain other field values.')]
 //    public function isValidPassword(): bool
 //    {
